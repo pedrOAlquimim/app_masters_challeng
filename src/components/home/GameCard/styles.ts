@@ -1,4 +1,5 @@
 import { styled } from '../../../../stitches.config'
+import { Heart } from 'phosphor-react'
 
 export const GameCardContainer = styled('div', {
   maxWidth: '20rem',
@@ -18,4 +19,16 @@ export const GameCardContainer = styled('div', {
     fontSize: '$xl',
     marginTop: '0.5rem',
   },
+})
+
+export const Footer = styled('footer', {
+  paddingTop: '0.25rem',
+  display: 'flex',
+  justifyContent: 'flex-end',
+  alignItems: 'center',
+  gap: '1rem',
+})
+
+export const HeartIcon = styled(Heart, {
+  cursor: 'pointer',
 })

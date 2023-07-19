@@ -22,6 +22,8 @@ export const { styled, getCssText, globalCss, theme, keyframes } =
 
         blue200: '#00DFFF',
 
+        red400: '#e86a51',
+
         green500: '#00B37E',
         green600: '#00875F',
 

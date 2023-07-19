@@ -18,20 +18,13 @@ export const Header = styled('header', {
     display: 'block',
   },
 
-  p: {
+  '> p': {
     display: 'flex',
     alignItems: 'center',
     gap: '0.75rem',
     color: '$gray100',
     fontSize: '$2xl',
   },
-})
-
-export const TagsContainer = styled('div', {
-  display: 'flex',
-  alignItems: 'center',
-  flexWrap: 'wrap',
-  gap: '0.75rem',
 })
 
 export const GameCardContainer = styled('div', {

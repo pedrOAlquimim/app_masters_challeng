@@ -1,27 +1,30 @@
 import { GameController } from 'phosphor-react'
-import { Container, GameCardContainer, Header, TagsContainer } from './styles'
 import { TextInput } from '@/components/home/TextInput'
 import { GameCard } from '@/components/home/GameCard'
-import { useEffect, useState } from 'react'
-import { api } from '@/lib/axios'
+import { useState } from 'react'
 import { Loader } from '@/components/Loader'
 import { Error } from '@/components/Error'
-import { AxiosResponse, isAxiosError } from 'axios'
-import { Tag } from '@/components/home/Tag'
+import { UserInfo } from '@/components/home/UserInfo'
+import { Tags } from '@/components/home/Tags'
+import { useAuth } from '@/hooks/useAuth'
+import { useGames } from '@/hooks/useGames'
+import {
+  Container,
+  GameCardContainer,
+  Header
+} from './styles'
 
-interface GameProps {
-  id: number
-  title: string
-  thumbnail: string
-  genre: string
-}
 
 export default function Home() {
-  const [games, setGames] = useState<GameProps[]>([])
-  const [filteredGenres, setFilteredGenres] = useState<string[]>([])
+  const { user } = useAuth()
+  const {
+    games,
+    errorStatus,
+    filteredGenres,
+    isLoading
+  } = useGames()
+
   const [search, setSearch] = useState<string>('')
-  const [isLoading, setIsLoading] = useState<boolean>(true)
-  const [errorStatus, setErrorStatus] = useState<number | null>(null)
   const [selectedGenre, setSelectedGenre] = useState<string>('')
 
   const filteredGames = games.filter((game) => {
@@ -30,31 +33,6 @@ export default function Home() {
       game.genre.includes(selectedGenre)
     )
   })
-
-  useEffect(() => {
-    async function main() {
-      try {
-        const response: AxiosResponse<GameProps[]> = await api.get('/data')
-        setGames(response.data)
-
-        const dataGenres = response.data.map((game: GameProps) => {
-          return game.genre
-        })
-        setFilteredGenres(
-          dataGenres.filter((genres, i) => {
-            return dataGenres.indexOf(genres) === i
-          }),
-        )
-      } catch (error) {
-        if (isAxiosError(error) && errorStatus === null) {
-          setErrorStatus(error.response!.status)
-        }
-      } finally {
-        setIsLoading(false)
-      }
-    }
-    main()
-  }, [errorStatus])
 
   if (isLoading) return <Loader size={25} color="#E1E1E6" loading={isLoading} />
   if (errorStatus !== null) return <Error status={errorStatus} />
@@ -71,35 +49,22 @@ export default function Home() {
           value={search}
           onChange={({ target }) => setSearch(target.value)}
         />
+
+        <UserInfo user={user} />
       </Header>
 
-      <TagsContainer>
-        <Tag
-          active={selectedGenre === ''}
-          onClick={() => {
-            setSelectedGenre('')
-          }}
-        >
-          Tudo
-        </Tag>
-        {filteredGenres.map((genre, i) => {
-          return (
-            <Tag
-              key={i}
-              active={selectedGenre === genre}
-              onClick={() => setSelectedGenre(genre)}
-            >
-              {genre}
-            </Tag>
-          )
-        })}
-      </TagsContainer>
+      <Tags 
+        selectedGenre={selectedGenre}
+        onSelectedGenres={setSelectedGenre}
+        filteredGenres={filteredGenres}
+      />
 
       <GameCardContainer>
         {filteredGames.map((game) => {
           return (
             <GameCard
               key={game.id}
+              gameId={game.id}
               genre={game.genre}
               thumbnail={game.thumbnail}
               title={game.title}
