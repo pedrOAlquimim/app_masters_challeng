@@ -1,20 +1,14 @@
-import { useEffect, useState } from "react"
+import { useState } from "react"
 import { Input, StarIcon } from "./styles"
 import { useRouter } from "next/router"
-import { dataBase } from "@/lib/firebase"
-import { collection, doc, setDoc } from "firebase/firestore"
-import { useAuth } from "@/hooks/useAuth"
-import { number } from "zod"
 
-interface RatingProps {
+export interface RatingProps {
   userId: string | undefined
   rating: number
   onSetRating: (data: number) => void
 }
 
-export function Rating({ userId, onSetRating, rating }:RatingProps ) {
-  const { user } = useAuth()
-
+export function Rating({ userId, onSetRating, rating }: RatingProps ) {
   const [ hover, setHover ] = useState<number>(0)
 
   const router = useRouter()

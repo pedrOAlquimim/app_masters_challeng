@@ -1,5 +1,4 @@
 import { styled } from '../../../../stitches.config'
-import { Heart } from 'phosphor-react'
 
 export const GameCardContainer = styled('div', {
   maxWidth: '20rem',
@@ -29,6 +28,16 @@ export const Footer = styled('footer', {
   gap: '1rem',
 })
 
-export const HeartIcon = styled(Heart, {
+export const FavoriteButton = styled('button', {
+  all: 'unset',
+  color: '$green600',
   cursor: 'pointer',
+
+  variants: {
+    favorite: {
+      true: {
+        color: '$red400',
+      }
+    }
+  }
 })
